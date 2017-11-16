@@ -59,25 +59,60 @@ namespace ElevenNote.Services
 
             using (var ctx = new ElevenNoteDbContext())
             {
-                entity =
-                    ctx
-                    .Notes
-                    .SingleOrDefault(e => e.NoteId == id && e.OwnerId == _userId);
+                entity = GetNoteById(ctx, id);
+            }
 
-                if (entity == null) return new NoteDetailModel();
+            if (entity == null) return new NoteDetailModel();
 
-                return 
-                    new NoteDetailModel
-                    {
-                        NodeId = entity.NoteId,
-                        Content = entity.Content,
-                        Title = entity.Title,
-                        CreatedUtc = entity.CreatedUtc,
-                        ModifiedUtc = entity.ModifiedUtc
-                    };
+            return
+                new NoteDetailModel
+                {
+                    NodeId = entity.NoteId,
+                    Content = entity.Content,
+                    Title = entity.Title,
+                    CreatedUtc = entity.CreatedUtc,
+                    ModifiedUtc = entity.ModifiedUtc
+                };
+
+        }
+
+        public bool UpdateNote(NoteEditModel model)
+        {
+            using (var ctx = new ElevenNoteDbContext())
+            {
+                var entity = GetNoteById(ctx, model.NodeId);
+                
+
+                if (entity == null) return false;
+
+                entity.Title = model.Title;
+                entity.Content = model.Content;
+                entity.ModifiedUtc = DateTime.UtcNow;
+
+                return ctx.SaveChanges() == 1;
             }
         }
 
+        private NoteEntity GetNoteById(ElevenNoteDbContext ctx, int id)
+        {
+            return
+                ctx
+                .Notes
+                .SingleOrDefault(e => e.NoteId == id && e.OwnerId == _userId);
 
+        }
+
+        public bool DeleteNote(int id)
+        {
+            using (var ctx = new ElevenNoteDbContext())
+            {
+                var entity = GetNoteById(ctx, id);
+
+                if (entity == null) return false;
+
+                ctx.Notes.Remove(entity);
+                return ctx.SaveChanges() == 1;
+            }
+        }
     }
 }
