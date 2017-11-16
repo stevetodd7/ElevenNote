@@ -35,6 +35,7 @@ namespace ElevenNote.Web.Controllers
 
             var userId = Guid.Parse(User.Identity.GetUserId());
             var svc = new NoteService(userId);
+
             if (!svc.CreateNote(model))
             {
                 ModelState.AddModelError("", "Unable to create note");
@@ -44,6 +45,14 @@ namespace ElevenNote.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Details(int id)
+        {
+            var userId = Guid.Parse(User.Identity.GetUserId());
 
+            var svc = new NoteService(userId);
+            var model = svc.GetNoteById(id);
+
+            return View(model);
+        }
     }
 }

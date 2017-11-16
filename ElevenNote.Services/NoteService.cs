@@ -34,9 +34,6 @@ namespace ElevenNote.Services
                         })
                     .ToArray();
             }
-
-
-
         }
 
         public bool CreateNote(NoteCreateModel model)
@@ -55,6 +52,32 @@ namespace ElevenNote.Services
                 return ctx.SaveChanges() == 1;
             }
         }
+
+        public NoteDetailModel GetNoteById(int id)
+        {
+            NoteEntity entity;
+
+            using (var ctx = new ElevenNoteDbContext())
+            {
+                entity =
+                    ctx
+                    .Notes
+                    .SingleOrDefault(e => e.NoteId == id && e.OwnerId == _userId);
+
+                if (entity == null) return new NoteDetailModel();
+
+                return 
+                    new NoteDetailModel
+                    {
+                        NodeId = entity.NoteId,
+                        Content = entity.Content,
+                        Title = entity.Title,
+                        CreatedUtc = entity.CreatedUtc,
+                        ModifiedUtc = entity.ModifiedUtc
+                    };
+            }
+        }
+
 
     }
 }
