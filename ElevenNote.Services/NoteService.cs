@@ -92,13 +92,14 @@ namespace ElevenNote.Services
         {
             using (var ctx = new ElevenNoteDbContext())
             {
-                var entity = GetNoteById(ctx, model.NodeId);
+                var entity = GetNoteById(ctx, model.NoteId);
                 
 
                 if (entity == null) return false;
 
                 entity.Title = model.Title;
                 entity.Content = model.Content;
+                entity.IsStarred = model.IsStarred;
                 entity.ModifiedUtc = DateTime.UtcNow;
 
                 return ctx.SaveChanges() == 1;

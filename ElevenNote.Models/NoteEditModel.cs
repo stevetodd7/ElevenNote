@@ -10,12 +10,14 @@ namespace ElevenNote.Models
     public class NoteEditModel
     {
         [Required]
-        public int NodeId { get; set; }
+        public int NoteId { get; set; }
 
         [Required]
         public string Title { get; set; }
 
         [MaxLength(500)]
         public string Content { get; set; }
+
+        public bool IsStarred { get; set; }
     }
 }

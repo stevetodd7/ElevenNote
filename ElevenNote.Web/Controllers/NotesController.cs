@@ -66,7 +66,7 @@ namespace ElevenNote.Web.Controllers
             var editModel =
                 new NoteEditModel
                 {
-                    NodeId = detailModel.NodeId,
+                    NoteId = detailModel.NodeId,
                     Title = detailModel.Title,
                     Content = detailModel.Content
                 };
@@ -78,10 +78,10 @@ namespace ElevenNote.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, NoteEditModel model)
         {
-            if (model.NodeId != id)
+            if (model.NoteId != id)
             {
                 ModelState.AddModelError("", "Nice try");
-                model.NodeId = id;
+                model.NoteId = id;
                 return View(model);
             }
 
